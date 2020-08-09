@@ -40,6 +40,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.io.RandomAccessFile;
 import java.util.List;
 import java.util.Scanner;
 
@@ -205,10 +206,10 @@ public class PlaceTrashCanActivity extends AppCompatActivity implements Permissi
                         }
                         try {
                             File gpxfile = new File(file, "Coordinates");
-                            fw = new FileWriter(gpxfile);
-                            fw.append(latitude+" "+longitude);
-                            fw.flush();
-                            fw.close();
+                            RandomAccessFile raf = new RandomAccessFile(gpxfile,"rw");
+                            raf.seek(raf.length());
+
+                            raf.writeChars(" "+longitude+" "+latitude+" \n");
                             Intent intent = new Intent(PlaceTrashCanActivity.this, MainActivity.class);
                             startActivity(intent);
                         }catch (Exception e){
