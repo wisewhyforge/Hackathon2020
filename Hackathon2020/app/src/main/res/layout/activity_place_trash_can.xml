@@ -4,35 +4,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
+    xmlns:mapbox="http://schemas.android.com/apk/res-auto"
     tools:context=".PlaceTrashCanActivity">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="295dp"
-        android:layout_height="35dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="65dp"
-        android:layout_marginEnd="66dp"
-        android:layout_marginBottom="631dp"
-        android:text="Report Placement of Garbage Can on Map"
-        android:textAlignment="center"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:mapbox="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/BackButtonTrashCan"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="29dp"
-        android:layout_marginTop="648dp"
-        android:layout_marginEnd="294dp"
-        android:layout_marginBottom="35dp"
-        android:text="Back"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <com.mapbox.mapboxsdk.maps.MapView
+            android:id="@+id/mapViewPlace"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            mapbox:mapbox_cameraZoom="15"/>
+
+        <Button
+            android:id="@+id/select_location_button"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_margin="8dp"
+            android:background="@color/colorPrimary"
+            android:text="Select a location"
+            android:textColor="@android:color/white"/>
+
+    </FrameLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

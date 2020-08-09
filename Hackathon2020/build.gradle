@@ -27,6 +27,7 @@ allprojects {
                 password = project.properties['MAPBOX_DOWNLOADS_TOKEN'] ?: ""
             }
         }
+        mavenCentral()
     }
 }
 
