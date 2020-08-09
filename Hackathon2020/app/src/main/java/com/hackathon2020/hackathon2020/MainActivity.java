@@ -7,10 +7,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.mapbox.mapboxsdk.location.LocationComponent;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
     Button displayMapButton, placeTrashCanButton;
-
+    public static ArrayList<LocationComponent> test = new ArrayList<LocationComponent>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
