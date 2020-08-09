@@ -86,7 +86,7 @@ public class MapActivity extends AppCompatActivity implements
     @Override
     public void onMapReady(@NonNull final MapboxMap mapboxMap) {
         MapActivity.this.mapboxMap = mapboxMap;
-        List<Feature> symbolLayerIconFeatureList = new ArrayList<>();
+        List<Feature> symbolLayerIconFeatureList = new ArrayList<Feature>();
         File file = new File(MapActivity.this.getFilesDir(), "coords");
         Scanner scanner;
         if (!file.exists()) {
@@ -100,9 +100,14 @@ public class MapActivity extends AppCompatActivity implements
             {
                 symbolLayerIconFeatureList.add(Feature.fromGeometry(
                         Point.fromLngLat(scanner.nextDouble(), scanner.nextDouble())));
+                scanner.nextLine();
             }
             System.out.println("Size: " + symbolLayerIconFeatureList.size());
         }catch (FileNotFoundException e){e.printStackTrace();}
+
+        for(int i = 0; i < symbolLayerIconFeatureList.size(); i++){
+            //System.out.println(symbolLayerIconFeatureList.get(i).);
+        }
 
         mapboxMap.setStyle(new Style.Builder().fromUri("mapbox://styles/mapbox/cjf4m44iw0uza2spb3q0a7s41")
 

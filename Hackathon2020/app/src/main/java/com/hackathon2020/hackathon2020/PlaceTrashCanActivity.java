@@ -40,7 +40,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.PrintWriter;
-import java.io.RandomAccessFile;
 import java.util.List;
 import java.util.Scanner;
 
@@ -200,16 +199,16 @@ public class PlaceTrashCanActivity extends AppCompatActivity implements Permissi
 
                          System.out.println("Coordinates: " + latitude + " " + longitude);
                         File file = new File(PlaceTrashCanActivity.this.getFilesDir(), "coords");
-                        FileWriter fw;
+                        PrintWriter pw;
                         if (!file.exists()) {
                             file.mkdir();
                         }
                         try {
                             File gpxfile = new File(file, "Coordinates");
-                            RandomAccessFile raf = new RandomAccessFile(gpxfile,"rw");
-                            raf.seek(raf.length());
-
-                            raf.writeChars(" "+longitude+" "+latitude+" \n");
+                            System.out.println(gpxfile.exists() + " " + gpxfile.getCanonicalFile());
+                            pw = new PrintWriter(gpxfile);
+                            pw.println(longitude+" "+latitude + " ");
+                            pw.close();
                             Intent intent = new Intent(PlaceTrashCanActivity.this, MainActivity.class);
                             startActivity(intent);
                         }catch (Exception e){
