@@ -18,10 +18,18 @@ public class MainActivity extends AppCompatActivity {
         displayMapButton = (Button) findViewById(R.id.displayMapButton);
         placeTrashCanButton = (Button) findViewById(R.id.placeTrashCanButton);
 
-        displayMapButton.setOnClickListener(new View.OnClickListener(){
+        placeTrashCanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 System.out.println("Clicked!");
+                Intent intent = new Intent(MainActivity.this, PlaceTrashCanActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        displayMapButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, MapActivity.class);
 
                 startActivity(intent);

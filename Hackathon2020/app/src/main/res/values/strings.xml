@@ -2,4 +2,6 @@
     <string name="app_name">Hackathon2020</string>
     <string name="MAPBOX_DOWNLOADS_TOKEN">sk.eyJ1Ijoiamx1bzEyMyIsImEiOiJja2RsdmRtaDYwZTRrMnRwZXN0ZWdiczN5In0.5umUs2ktnd7Ls8ndLWmz_w</string>
     <string name="MAPBOX_ACCESS_TOKEN">pk.eyJ1Ijoiamx1bzEyMyIsImEiOiJja2RrbnhzMzkwMWlnMnJwanJkMGViaTlzIn0.UUighni_lxcf0qHt8ENkgQ</string>
+    <string name="user_location_permission_explanation">We need your location to add garbage cans and let you find them.</string>
+    <string name="user_location_permission_not_granted">Location Permissions not Granted Try Enabling in App Specific Settings</string>
 </resources>
