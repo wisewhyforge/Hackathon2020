@@ -9,8 +9,15 @@ import android.widget.Button;
 
 import com.mapbox.mapboxsdk.location.LocationComponent;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,6 +29,21 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         displayMapButton = (Button) findViewById(R.id.displayMapButton);
         placeTrashCanButton = (Button) findViewById(R.id.placeTrashCanButton);
+
+        /*
+        File file = new File(MainActivity.this.getFilesDir(), "coords");
+        if (!file.exists()) {
+            file.mkdir();
+        }
+        try {
+            File gpxfile = new File(file, "Coordinates");
+            FileWriter writer = new FileWriter(gpxfile);
+            writer.append(10 + " " + 10);
+            writer.flush();
+            writer.close();
+
+        } catch (Exception e) {e.printStackTrace(); }
+        */
 
         placeTrashCanButton.setOnClickListener(new View.OnClickListener() {
             @Override

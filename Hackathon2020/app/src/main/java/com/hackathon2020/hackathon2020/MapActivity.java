@@ -43,11 +43,8 @@ import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -58,7 +55,7 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconIgnorePlacem
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconImage;
 
 public class MapActivity extends AppCompatActivity implements
-       PermissionsListener, OnMapReadyCallback{
+       PermissionsListener, OnMapReadyCallback {
     private PermissionsManager permissionsManager;
     private MapboxMap mapboxMap;
     private MapView mapView;
@@ -86,30 +83,26 @@ public class MapActivity extends AppCompatActivity implements
         mapView.getMapAsync(this);
     }
 
-
-
-
     @Override
     public void onMapReady(@NonNull final MapboxMap mapboxMap) {
         MapActivity.this.mapboxMap = mapboxMap;
-        Scanner scanner = null;
         List<Feature> symbolLayerIconFeatureList = new ArrayList<>();
         File file = new File(MapActivity.this.getFilesDir(), "coords");
+        Scanner scanner;
         if (!file.exists()) {
             file.mkdir();
         }
         try {
             File gpxfile = new File(file, "Coordinates");
             scanner = new Scanner(gpxfile);
+
             while(scanner.hasNext())
             {
                 symbolLayerIconFeatureList.add(Feature.fromGeometry(
                         Point.fromLngLat(scanner.nextDouble(), scanner.nextDouble())));
             }
-        }catch (FileNotFoundException e){}
-
-
-
+            System.out.println("Size: " + symbolLayerIconFeatureList.size());
+        }catch (FileNotFoundException e){e.printStackTrace();}
 
         mapboxMap.setStyle(new Style.Builder().fromUri("mapbox://styles/mapbox/cjf4m44iw0uza2spb3q0a7s41")
 

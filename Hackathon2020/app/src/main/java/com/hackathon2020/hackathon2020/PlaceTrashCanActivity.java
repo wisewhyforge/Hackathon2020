@@ -1,5 +1,6 @@
 package com.hackathon2020.hackathon2020;
 
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -7,7 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -17,6 +20,7 @@ import androidx.core.content.ContextCompat;
 import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
 
+import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.geometry.LatLng;
@@ -34,6 +38,7 @@ import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.List;
 import java.util.Scanner;
@@ -60,10 +65,11 @@ public class PlaceTrashCanActivity extends AppCompatActivity implements Permissi
     private static final String DROPPED_MARKER_LAYER_ID = "DROPPED_MARKER_LAYER_ID";
     private MapView mapView;
     private MapboxMap mapboxMap;
-    private Button selectLocationButton;
+    private Button selectLocationButton, confirmButton;
     private PermissionsManager permissionsManager;
     private ImageView hoveringMarker;
     private Layer droppedMarkerLayer;
+    private LatLng mapTargetLatLng;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +106,7 @@ public class PlaceTrashCanActivity extends AppCompatActivity implements Permissi
 // swap out for your own marker image, just make sure it matches up with the dropped marker.
                 hoveringMarker = new ImageView(PlaceTrashCanActivity.this);
                 hoveringMarker.setImageResource(R.drawable.mapbox_marker_icon_default);
-                FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                LayoutParams params = new LayoutParams(
                         ViewGroup.LayoutParams.WRAP_CONTENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.CENTER);
                 hoveringMarker.setLayoutParams(params);
@@ -111,13 +117,15 @@ public class PlaceTrashCanActivity extends AppCompatActivity implements Permissi
 
 // Button for user to drop marker or to pick marker back up.
                 selectLocationButton = findViewById(R.id.select_location_button);
+                confirmButton = (Button) findViewById(R.id.confirmButton);
+                confirmButton.setVisibility(View.INVISIBLE);
                 selectLocationButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         if (hoveringMarker.getVisibility() == View.VISIBLE) {
 
 // Use the map target's coordinates to make a reverse geocoding search
-                            final LatLng mapTargetLatLng = mapboxMap.getCameraPosition().target;
+                            mapTargetLatLng = mapboxMap.getCameraPosition().target;
 
 // Hide the hovering red hovering ImageView marker
                             hoveringMarker.setVisibility(View.INVISIBLE);
@@ -125,13 +133,17 @@ public class PlaceTrashCanActivity extends AppCompatActivity implements Permissi
 // Transform the appearance of the button to become the cancel button
                             selectLocationButton.setBackgroundColor(
                                     ContextCompat.getColor(PlaceTrashCanActivity.this, R.color.colorAccent));
+                            /*LayoutParams layoutParams = new LayoutParams(selectLocationButton.getWidth()/2,
+                                    LayoutParams.WRAP_CONTENT,
+                                    Gravity.BOTTOM);
+                            layoutParams.bottomMargin = 8*2;
+                            layoutParams.leftMargin = 8*2;
+                            layoutParams.topMargin = 8*2;
+                            layoutParams.rightMargin = 8*2;
+                            selectLocationButton.setLayoutParams(layoutParams);
+                            */
                             selectLocationButton.setText(getString(R.string.location_picker_select_location_button_cancel));
-                            try {
-
-                                PrintWriter printWriter = new PrintWriter("Desktop\\Coordinates.txt");
-                            } catch (FileNotFoundException e) {
-                                e.printStackTrace();
-                            }
+                            confirmButton.setVisibility(View.VISIBLE);
 
 // Show the SymbolLayer icon to represent the selected map location
                             if (style.getLayer(DROPPED_MARKER_LAYER_ID) != null) {
@@ -153,7 +165,19 @@ public class PlaceTrashCanActivity extends AppCompatActivity implements Permissi
 // Switch the button appearance back to select a location.
                             selectLocationButton.setBackgroundColor(
                                     ContextCompat.getColor(PlaceTrashCanActivity.this, R.color.colorPrimary));
+                            /*
+                            LayoutParams layoutParams = new LayoutParams(selectLocationButton.getWidth()*2,
+                                    LayoutParams.WRAP_CONTENT,
+                                    Gravity.BOTTOM);
+                            layoutParams.bottomMargin = 8*2;
+                            layoutParams.leftMargin = 8*2;
+                            layoutParams.topMargin = 8*2;
+                            layoutParams.rightMargin = 8*2;
+
+                            selectLocationButton.setLayoutParams(new LayoutParams(layoutParams));
+                             */
                             selectLocationButton.setText(getString(R.string.location_picker_select_location_button_select));
+                            confirmButton.setVisibility(View.INVISIBLE);
 
 // Show the red hovering ImageView marker
                             hoveringMarker.setVisibility(View.VISIBLE);
@@ -163,6 +187,34 @@ public class PlaceTrashCanActivity extends AppCompatActivity implements Permissi
                             if (droppedMarkerLayer != null) {
                                 droppedMarkerLayer.setProperties(visibility(NONE));
                             }
+                        }
+                    }
+                });
+
+                confirmButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                         double latitude = mapTargetLatLng.getLatitude();
+                         double longitude = mapTargetLatLng.getLongitude();
+
+                         System.out.println("Coordinates: " + latitude + " " + longitude);
+                        File file = new File(PlaceTrashCanActivity.this.getFilesDir(), "coords");
+                        FileWriter fw;
+                        if (!file.exists()) {
+                            file.mkdir();
+                        }
+                        try {
+                            File gpxfile = new File(file, "Coordinates");
+                            fw = new FileWriter(gpxfile);
+                            fw.append(latitude+" "+longitude);
+                            fw.flush();
+                            fw.close();
+                            Intent intent = new Intent(PlaceTrashCanActivity.this, MainActivity.class);
+                            startActivity(intent);
+                        }catch (Exception e){
+                            e.printStackTrace();
+                            Toast error = Toast.makeText(PlaceTrashCanActivity.this,"A File Error has Occurred", Toast.LENGTH_SHORT);
+                            error.show();
                         }
                     }
                 });
@@ -250,16 +302,6 @@ public class PlaceTrashCanActivity extends AppCompatActivity implements Permissi
             finish();
         }
     }
-
-    /**
-     * This method is used to reverse geocode where the user has dropped the marker.
-     *
-     *
-     */
-
-
-
-
 
 
     @SuppressWarnings( {"MissingPermission"})
