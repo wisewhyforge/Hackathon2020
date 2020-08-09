@@ -15,7 +15,11 @@
         android:layout_height="match_parent">
 
         <com.mapbox.mapboxsdk.maps.MapView
+<<<<<<< HEAD
             android:id="@+id/mapViewPlace"
+=======
+            android:id="@+id/mapView"
+>>>>>>> a35d0960d12f132cc08f578b6fab37afddb34da4
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             mapbox:mapbox_cameraZoom="15"/>

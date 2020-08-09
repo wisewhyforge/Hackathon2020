@@ -77,7 +77,11 @@ public class PlaceTrashCanActivity extends AppCompatActivity implements Permissi
         setContentView(R.layout.activity_place_trash_can);
 
 // Initialize the mapboxMap view
+<<<<<<< HEAD
         mapView = findViewById(R.id.mapViewPlace);
+=======
+        mapView = findViewById(R.id.mapView);
+>>>>>>> a35d0960d12f132cc08f578b6fab37afddb34da4
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
     }
